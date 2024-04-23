@@ -1,0 +1,34 @@
+services:
+  bot:
+    build:
+      context: ./bot
+      dockerfile: bot.dockerfile
+    environment:
+      DISCORD_SECRETS_FILE: /run/secrets/discord_secrets
+    secrets:
+      - discord_secrets
+
+  db:
+    build:
+      context: ./db
+      dockerfile: db.dockerfile
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./bot_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  bot_data:
+
+secrets:
+  discord_secrets:
+    file: ./bot/.env
+    

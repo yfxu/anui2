@@ -70,7 +70,9 @@ async def snek_counter(ctx: lightbulb.SlashContext) -> None:
     cur = conn.cursor()
     cur.execute("SELECT COUNT(*) FROM sneks WHERE user_id_snekker = %s AND user_id_snekked = %s", (user_snekker.id, user_snekked.id))
     count = cur.fetchall()[0][0]
-    await ctx.respond(f"<@{user_snekker.id}> has snekked <@{user_snekked.id}> {count} times!")
+
+    embed = hikari.Embed(description=f"<@{user_snekked.id}> has been snekked by <@{user_snekker.id}> `{count}` times!")
+    await ctx.respond(embed=embed)
     
 
 @bot.command
